@@ -1,0 +1,113 @@
+#include "raylib.h"
+#include"cstdlib"
+
+void DrawPers(int x,int y) {
+	DrawRectangle(x, y, 50, 50, BLUE);
+}
+
+int main() 
+{
+	int WeightScreen = 800;
+	int HeightScreen = 600;
+	InitWindow(WeightScreen,HeightScreen,"test");
+	SetTargetFPS(60);
+	int playerX = 400, playerY = 500;
+	int SpeedPlayer = 5;
+	int playerWeight = 50, playerHeight = 50;
+	int Jump = 50;
+	int ButtonY = 530;
+	int ButtonX = 490;
+	int KeyX = 2000;
+	int KeyY = 300;
+	bool isJumping = false;
+	int gravity = 5;
+	int velocityY;
+	
+	int DoorX = 2000;
+	int DoorY = 450;
+	int EnemyX = 200;
+	int EnemyY = 500;
+	int enemySpeed = 4;
+	
+	bool ButtonDown = false;
+	bool ExitDoorOpen = false;
+	bool PlayerWin = false;
+	bool PlayerLose = false;
+	bool GameVoid = true;
+	while (!WindowShouldClose()) {
+
+		
+		
+		if (IsKeyPressed(KEY_UP) && !isJumping) {
+			isJumping = true;
+			velocityY = -Jump;
+		}
+		if (IsKeyDown(KEY_RIGHT) && playerX<WeightScreen - playerWeight) { playerX += SpeedPlayer; }
+		if (IsKeyDown(KEY_LEFT)&& playerX > 0) { playerX -= SpeedPlayer; }
+
+		Rectangle KeyRect = { static_cast<float>(KeyX),static_cast<float> (KeyY),static_cast<float> (20),static_cast<float> (20) };
+		Rectangle playerRect = { static_cast<float>(playerX),static_cast<float>(playerY),static_cast<float> (playerWeight),static_cast<float>(playerHeight) };
+		Rectangle ButtonRect = { static_cast<float>(ButtonX),static_cast<float>(ButtonY),static_cast<float> (40),static_cast<float>(40) };
+		Rectangle DoorRect = { static_cast<float> (DoorX),static_cast<float> (DoorY),static_cast<float> (70),static_cast<float>(100)};
+		Rectangle EnemyRect = { static_cast<float> (EnemyX),static_cast<float> (EnemyY),static_cast<float>(50),static_cast<float>(50) };
+
+		if (CheckCollisionRecs(playerRect, ButtonRect) && ButtonDown == false)
+		{
+			KeyX = 400;
+			ButtonY += 8;
+			ButtonDown = true;
+		} 
+		if (CheckCollisionRecs(playerRect, EnemyRect)) {
+			PlayerLose = true;
+			DrawText("You Lose", 300, 200, 48, RED);
+		}
+		
+		if (CheckCollisionRecs(playerRect, KeyRect)) {
+			ExitDoorOpen = true;
+			KeyX += 2000;
+			DoorX = 730;
+		}
+
+		if (CheckCollisionRecs(playerRect, DoorRect)) {
+			PlayerWin = true;
+			DrawText("You Win", 300, 200, 48, RED);
+		}
+
+		if (isJumping) {
+			playerY += velocityY;
+			velocityY += gravity;
+
+
+			if (playerY >= HeightScreen - playerHeight) {
+				playerY = HeightScreen - playerHeight - 50;
+				isJumping = false;
+			}
+		}
+		if (ExitDoorOpen) {
+			DrawRectangle(DoorX, DoorY, 70, 100, BLACK);
+		}
+		if (ButtonDown) {
+			DrawRectangle(KeyX, KeyY, 20, 20, GOLD);
+		}
+		
+		if (GameVoid) {
+			BeginDrawing();
+			ClearBackground(RAYWHITE);
+			DrawPers(playerX, playerY);
+			DrawRectangle(EnemyX, EnemyY, 50, 50, RED);
+			DrawRectangle(ButtonX, ButtonY, 40, 40, RED);
+			DrawRectangle(480, 540, 60, 40, GRAY);
+			DrawRectangle(0, 550, 800, 50, GREEN);
+			if (PlayerWin) {
+				GameVoid = false;
+			
+			}
+			if (PlayerLose) {
+				GameVoid = false;
+			}
+			EndDrawing();
+		}
+	}
+	CloseWindow();
+	return 0;
+}
