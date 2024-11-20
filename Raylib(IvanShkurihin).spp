@@ -1,9 +1,63 @@
 #include "raylib.h"
 #include"cstdlib"
 
+int playerX = 400, playerY = 500;
+int SpeedPlayer = 5;
+int playerWeight = 50, playerHeight = 50;
+int Jump = 50;
+int ButtonY = 530;
+int ButtonX = 490;
+int KeyX = 2000;
+int KeyY = 300;
+bool isJumping = false;
+int gravity = 5;
+int velocityY;
+
+int DoorX = 2000;
+int DoorY = 450;
+int EnemyX = 200;
+int EnemyY = 510;
+int enemySpeed = 4;
+
+int wallX = 600;
+int wallY = 250;
+int wallWeight = 50;
+int wallHeight = 300;
+
+int wallX2 = 200;
+int wallY2 = 350;
+int wallWeight2 = 300;
+int wallHeight2 = 50;
+
+
+bool ButtonDown = false;
+bool ExitDoorOpen = false;
+bool PlayerWin = false;
+bool PlayerLose = false;
+bool GameVoid = true;
+
+Rectangle KeyRect = { static_cast<float>(KeyX),static_cast<float> (KeyY),static_cast<float> (20),static_cast<float> (20) };
+Rectangle playerRect = { static_cast<float>(playerX),static_cast<float>(playerY),static_cast<float> (playerWeight),static_cast<float>(playerHeight) };
+Rectangle ButtonRect = { static_cast<float>(ButtonX),static_cast<float>(ButtonY),static_cast<float> (40),static_cast<float>(40) };
+Rectangle DoorRect = { static_cast<float> (DoorX),static_cast<float> (DoorY),static_cast<float> (70),static_cast<float>(100) };
+Rectangle EnemyRect = { static_cast<float> (EnemyX),static_cast<float> (EnemyY),static_cast<float>(30),static_cast<float>(30) };
+Rectangle wallRect1 = { static_cast<float> (wallX),static_cast<float> (wallY),static_cast<float> (wallWeight),static_cast<float> (wallHeight) };
+Rectangle wallRect2 = { static_cast<float> (wallX2),static_cast<float> (wallY2),static_cast<float> (wallWeight2),static_cast<float> (wallHeight2) };
+
 void DrawPers(int x,int y) {
 	DrawRectangle(x, y, 50, 50, BLUE);
 }
+
+
+
+bool CollAll() {
+	if (CheckCollisionRecs(playerRect, wallRect2)|| CheckCollisionRecs(playerRect, wallRect1)|| CheckCollisionRecs(playerRect, ButtonRect) || CheckCollisionRecs(playerRect, EnemyRect) || CheckCollisionRecs(playerRect, KeyRect) || CheckCollisionRecs(playerRect, DoorRect))
+	{
+		return(true);
+	}
+}
+
+
 
 int main() 
 {
@@ -22,18 +76,32 @@ int main()
 	bool isJumping = false;
 	int gravity = 5;
 	int velocityY;
-	
+
 	int DoorX = 2000;
 	int DoorY = 450;
 	int EnemyX = 200;
-	int EnemyY = 500;
+	int EnemyY = 510;
 	int enemySpeed = 4;
-	
+
+	int wallX = 600;
+	int wallY = 250;
+	int wallWeight = 50;
+	int wallHeight = 300;
+
+	int wallX2 = 200;
+	int wallY2 = 350;
+	int wallWeight2 = 300;
+	int wallHeight2 = 50;
+
+
 	bool ButtonDown = false;
 	bool ExitDoorOpen = false;
 	bool PlayerWin = false;
 	bool PlayerLose = false;
 	bool GameVoid = true;
+
+	
+	
 	while (!WindowShouldClose()) {
 
 		
@@ -45,11 +113,42 @@ int main()
 		if (IsKeyDown(KEY_RIGHT) && playerX<WeightScreen - playerWeight) { playerX += SpeedPlayer; }
 		if (IsKeyDown(KEY_LEFT)&& playerX > 0) { playerX -= SpeedPlayer; }
 
+		
 		Rectangle KeyRect = { static_cast<float>(KeyX),static_cast<float> (KeyY),static_cast<float> (20),static_cast<float> (20) };
 		Rectangle playerRect = { static_cast<float>(playerX),static_cast<float>(playerY),static_cast<float> (playerWeight),static_cast<float>(playerHeight) };
 		Rectangle ButtonRect = { static_cast<float>(ButtonX),static_cast<float>(ButtonY),static_cast<float> (40),static_cast<float>(40) };
-		Rectangle DoorRect = { static_cast<float> (DoorX),static_cast<float> (DoorY),static_cast<float> (70),static_cast<float>(100)};
-		Rectangle EnemyRect = { static_cast<float> (EnemyX),static_cast<float> (EnemyY),static_cast<float>(50),static_cast<float>(50) };
+		Rectangle DoorRect = { static_cast<float> (DoorX),static_cast<float> (DoorY),static_cast<float> (70),static_cast<float>(100) };
+		Rectangle EnemyRect = { static_cast<float> (EnemyX),static_cast<float> (EnemyY),static_cast<float>(30),static_cast<float>(30) };
+		Rectangle wallRect1 = { static_cast<float> (wallX),static_cast<float> (wallY),static_cast<float> (wallWeight),static_cast<float> (wallHeight) };
+		Rectangle wallRect2 = { static_cast<float> (wallX2),static_cast<float> (wallY2),static_cast<float> (wallWeight2),static_cast<float> (wallHeight2) };
+		if (CheckCollisionRecs(playerRect, wallRect1))
+		{
+			if (IsKeyDown(KEY_RIGHT) && playerX < WeightScreen - playerWeight) { playerX -= SpeedPlayer; }
+			if (IsKeyDown(KEY_LEFT) && playerX > 0) { playerX += SpeedPlayer; }
+		}
+		if (CheckCollisionRecs(playerRect, wallRect1) && playerY < wallY)
+		{
+			playerY = wallY - playerHeight;
+			velocityY = 0;
+			isJumping = false;
+			if (IsKeyPressed(KEY_UP) && !isJumping) {
+				isJumping = true;
+				velocityY = -Jump;
+			}
+		}
+		if (CheckCollisionRecs(playerRect, wallRect2) && playerY < wallY2)
+		{
+			playerY -= 10;
+			isJumping = false;
+			
+			if (IsKeyPressed(KEY_UP) && !isJumping) {
+				isJumping = true;
+				velocityY = -Jump;
+			}
+			
+		}
+		
+
 
 		if (CheckCollisionRecs(playerRect, ButtonRect) && ButtonDown == false)
 		{
@@ -94,10 +193,12 @@ int main()
 			BeginDrawing();
 			ClearBackground(RAYWHITE);
 			DrawPers(playerX, playerY);
-			DrawRectangle(EnemyX, EnemyY, 50, 50, RED);
+			DrawRectangle(EnemyX, EnemyY, 40, 40, RED);
 			DrawRectangle(ButtonX, ButtonY, 40, 40, RED);
 			DrawRectangle(480, 540, 60, 40, GRAY);
 			DrawRectangle(0, 550, 800, 50, GREEN);
+			DrawRectangle(wallX, wallY, wallWeight, wallHeight, GREEN);
+			DrawRectangle(wallX2, wallY2, wallWeight2, wallHeight2, GREEN);
 			if (PlayerWin) {
 				GameVoid = false;
 			
