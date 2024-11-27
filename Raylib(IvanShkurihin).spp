@@ -35,6 +35,7 @@ bool ExitDoorOpen = false;
 bool PlayerWin = false;
 bool PlayerLose = false;
 bool GameVoid = true;
+bool GameStart = false;
 
 Rectangle KeyRect = { static_cast<float>(KeyX),static_cast<float> (KeyY),static_cast<float> (20),static_cast<float> (20) };
 Rectangle playerRect = { static_cast<float>(playerX),static_cast<float>(playerY),static_cast<float> (playerWeight),static_cast<float>(playerHeight) };
@@ -46,18 +47,27 @@ Rectangle wallRect2 = { static_cast<float> (wallX2),static_cast<float> (wallY2),
 
 void DrawPers(int x,int y) {
 	DrawRectangle(x, y, 50, 50, BLUE);
+	
 }
 
 
 
 bool CollAll() {
-	if (CheckCollisionRecs(playerRect, wallRect2)|| CheckCollisionRecs(playerRect, wallRect1)|| CheckCollisionRecs(playerRect, ButtonRect) || CheckCollisionRecs(playerRect, EnemyRect) || CheckCollisionRecs(playerRect, KeyRect) || CheckCollisionRecs(playerRect, DoorRect))
+	if (CheckCollisionRecs(playerRect, wallRect2) || CheckCollisionRecs(playerRect, wallRect1) || CheckCollisionRecs(playerRect, ButtonRect) || CheckCollisionRecs(playerRect, EnemyRect) || CheckCollisionRecs(playerRect, KeyRect) || CheckCollisionRecs(playerRect, DoorRect))
 	{
 		return(true);
 	}
+	
 }
 
+void DrawMenu()
+{
 
+	ClearBackground(BLACK);
+	DrawRectangle(300, 300, 200, 100, RED);
+	DrawText("PLAY", 320, 320, 60, BLUE);
+	
+}
 
 int main() 
 {
@@ -104,7 +114,10 @@ int main()
 	
 	while (!WindowShouldClose()) {
 
-		
+		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && GameStart == false )
+		{
+			GameStart = true;
+		}
 		
 		if (IsKeyPressed(KEY_UP) && !isJumping) {
 			isJumping = true;
@@ -121,6 +134,8 @@ int main()
 		Rectangle EnemyRect = { static_cast<float> (EnemyX),static_cast<float> (EnemyY),static_cast<float>(30),static_cast<float>(30) };
 		Rectangle wallRect1 = { static_cast<float> (wallX),static_cast<float> (wallY),static_cast<float> (wallWeight),static_cast<float> (wallHeight) };
 		Rectangle wallRect2 = { static_cast<float> (wallX2),static_cast<float> (wallY2),static_cast<float> (wallWeight2),static_cast<float> (wallHeight2) };
+
+
 		if (CheckCollisionRecs(playerRect, wallRect1))
 		{
 			if (IsKeyDown(KEY_RIGHT) && playerX < WeightScreen - playerWeight) { playerX -= SpeedPlayer; }
@@ -129,7 +144,7 @@ int main()
 		if (CheckCollisionRecs(playerRect, wallRect1) && playerY < wallY)
 		{
 			playerY = wallY - playerHeight;
-			velocityY = 0;
+			
 			isJumping = false;
 			if (IsKeyPressed(KEY_UP) && !isJumping) {
 				isJumping = true;
@@ -148,8 +163,6 @@ int main()
 			
 		}
 		
-
-
 		if (CheckCollisionRecs(playerRect, ButtonRect) && ButtonDown == false)
 		{
 			KeyX = 400;
@@ -167,9 +180,11 @@ int main()
 			DoorX = 730;
 		}
 
+
 		if (CheckCollisionRecs(playerRect, DoorRect)) {
-			PlayerWin = true;
 			DrawText("You Win", 300, 200, 48, RED);
+			PlayerWin = true;
+			
 		}
 
 		if (isJumping) {
@@ -191,20 +206,43 @@ int main()
 		
 		if (GameVoid) {
 			BeginDrawing();
-			ClearBackground(RAYWHITE);
-			DrawPers(playerX, playerY);
-			DrawRectangle(EnemyX, EnemyY, 40, 40, RED);
-			DrawRectangle(ButtonX, ButtonY, 40, 40, RED);
-			DrawRectangle(480, 540, 60, 40, GRAY);
-			DrawRectangle(0, 550, 800, 50, GREEN);
-			DrawRectangle(wallX, wallY, wallWeight, wallHeight, GREEN);
-			DrawRectangle(wallX2, wallY2, wallWeight2, wallHeight2, GREEN);
+			if (!GameStart) { 
+				DrawMenu();
+				
+			}
+			if (GameStart) {
+				
+				ClearBackground(RAYWHITE);
+				DrawPers(playerX, playerY);
+				DrawRectangle(EnemyX, EnemyY, 40, 40, RED);
+				DrawRectangle(ButtonX, ButtonY, 40, 40, RED);
+				DrawRectangle(480, 540, 60, 40, GRAY);
+				DrawRectangle(0, 550, 800, 50, GREEN);
+				DrawRectangle(wallX, wallY, wallWeight, wallHeight, GREEN);
+				DrawRectangle(wallX2, wallY2, wallWeight2, wallHeight2, GREEN);
+			}
+			
 			if (PlayerWin) {
-				GameVoid = false;
+				
+				PlayerWin = false;
+			
+				DrawMenu();
+					
+				GameStart = false;
+				
+				
+				
 			
 			}
 			if (PlayerLose) {
 				GameVoid = false;
+				if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+				{
+					
+					GameStart = false;
+					main();
+				}
+
 			}
 			EndDrawing();
 		}
