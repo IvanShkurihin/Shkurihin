@@ -85,7 +85,7 @@ int main()
 	int KeyY = 300;
 	bool isJumping = false;
 	int gravity = 5;
-	int velocityY;
+	int velocityY = 0;
 
 	int DoorX = 2000;
 	int DoorY = 450;
@@ -109,12 +109,16 @@ int main()
 	bool PlayerWin = false;
 	bool PlayerLose = false;
 	bool GameVoid = true;
-
+	bool mouseOnbtn = false;
 	
 	
 	while (!WindowShouldClose()) {
-
-		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && GameStart == false )
+		Vector2 mpos = { -10.0f,-10.0f };
+		mpos = GetMousePosition();
+		if ((mpos.x >= 300) && (mpos.y <= 400) && (mpos.x <= 500) && (mpos.y >= 300)) {
+			mouseOnbtn = true;
+		}
+		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && GameStart == false && mouseOnbtn)
 		{
 			GameStart = true;
 		}
@@ -123,8 +127,11 @@ int main()
 			isJumping = true;
 			velocityY = -Jump;
 		}
-		if (IsKeyDown(KEY_RIGHT) && playerX<WeightScreen - playerWeight) { playerX += SpeedPlayer; }
-		if (IsKeyDown(KEY_LEFT)&& playerX > 0) { playerX -= SpeedPlayer; }
+		if (!PlayerLose || !PlayerWin){
+			if (IsKeyDown(KEY_RIGHT) && playerX<WeightScreen - playerWeight) { playerX += SpeedPlayer; }
+			if (IsKeyDown(KEY_LEFT)&& playerX > 0) { playerX -= SpeedPlayer; }
+		}
+		
 
 		
 		Rectangle KeyRect = { static_cast<float>(KeyX),static_cast<float> (KeyY),static_cast<float> (20),static_cast<float> (20) };
@@ -134,7 +141,7 @@ int main()
 		Rectangle EnemyRect = { static_cast<float> (EnemyX),static_cast<float> (EnemyY),static_cast<float>(30),static_cast<float>(30) };
 		Rectangle wallRect1 = { static_cast<float> (wallX),static_cast<float> (wallY),static_cast<float> (wallWeight),static_cast<float> (wallHeight) };
 		Rectangle wallRect2 = { static_cast<float> (wallX2),static_cast<float> (wallY2),static_cast<float> (wallWeight2),static_cast<float> (wallHeight2) };
-
+		
 
 		if (CheckCollisionRecs(playerRect, wallRect1))
 		{
@@ -153,8 +160,9 @@ int main()
 		}
 		if (CheckCollisionRecs(playerRect, wallRect2) && playerY < wallY2)
 		{
-			playerY -= 10;
 			isJumping = false;
+			playerY = wallY2 - wallHeight2 - 50;
+			
 			
 			if (IsKeyPressed(KEY_UP) && !isJumping) {
 				isJumping = true;
@@ -162,8 +170,28 @@ int main()
 			}
 			
 		}
+		else if(isJumping == false && !CheckCollisionRecs(playerRect, wallRect2) && playerY < wallY2)
+		{
+			
+			if (playerY >= wallY2 - wallHeight2 - playerHeight) {
+				playerY = wallY2 - wallHeight2 - playerHeight;
+				isJumping = false;
+			}
+		}
+		if (!CheckCollisionRecs(playerRect, wallRect2) && isJumping == false ) {
+			playerY += velocityY;
+			velocityY += gravity;
+
+
+			if (playerY >= HeightScreen - playerHeight) {
+				playerY = HeightScreen - playerHeight - 50;
+				isJumping = false;
+			}
+		}
+
 		
-		if (CheckCollisionRecs(playerRect, ButtonRect) && ButtonDown == false)
+		
+		if (CheckCollisionRecs(playerRect, ButtonRect) && ButtonDown == false && GameStart)
 		{
 			KeyX = 400;
 			ButtonY += 8;
@@ -174,14 +202,14 @@ int main()
 			DrawText("You Lose", 300, 200, 48, RED);
 		}
 		
-		if (CheckCollisionRecs(playerRect, KeyRect)) {
+		if (CheckCollisionRecs(playerRect, KeyRect) && GameStart) {
 			ExitDoorOpen = true;
 			KeyX += 2000;
 			DoorX = 730;
 		}
 
 
-		if (CheckCollisionRecs(playerRect, DoorRect)) {
+		if (CheckCollisionRecs(playerRect, DoorRect) && GameStart) {
 			DrawText("You Win", 300, 200, 48, RED);
 			PlayerWin = true;
 			
@@ -196,11 +224,16 @@ int main()
 				playerY = HeightScreen - playerHeight - 50;
 				isJumping = false;
 			}
+			if ((playerY >= wallY2 - wallHeight2 - playerHeight) && CheckCollisionRecs(playerRect, wallRect2)) {
+				playerY = wallY2 - wallHeight2 - playerHeight;
+				isJumping = false;
+			}
+			
 		}
-		if (ExitDoorOpen) {
+		if (ExitDoorOpen && GameStart) {
 			DrawRectangle(DoorX, DoorY, 70, 100, BLACK);
 		}
-		if (ButtonDown) {
+		if (ButtonDown && GameStart) {
 			DrawRectangle(KeyX, KeyY, 20, 20, GOLD);
 		}
 		
@@ -223,10 +256,16 @@ int main()
 			}
 			
 			if (PlayerWin) {
+				if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && mouseOnbtn)
+				{
+
+					
+					CloseWindow();
+					main();
+				}
 				
-				PlayerWin = false;
 			
-				DrawMenu();
+				
 					
 				GameStart = false;
 				
@@ -235,13 +274,13 @@ int main()
 			
 			}
 			if (PlayerLose) {
-				GameVoid = false;
-				if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-				{
+				
+				
 					
-					GameStart = false;
-					main();
-				}
+				GameStart = false;
+				CloseWindow();
+				main();
+				
 
 			}
 			EndDrawing();
