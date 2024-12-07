@@ -28,7 +28,8 @@ int wallX2 = 200;
 int wallY2 = 350;
 int wallWeight2 = 300;
 int wallHeight2 = 50;
-
+bool enemyXmax = true;
+bool enemyxmax = false;
 
 bool ButtonDown = false;
 bool ExitDoorOpen = false;
@@ -45,20 +46,14 @@ Rectangle EnemyRect = { static_cast<float> (EnemyX),static_cast<float> (EnemyY),
 Rectangle wallRect1 = { static_cast<float> (wallX),static_cast<float> (wallY),static_cast<float> (wallWeight),static_cast<float> (wallHeight) };
 Rectangle wallRect2 = { static_cast<float> (wallX2),static_cast<float> (wallY2),static_cast<float> (wallWeight2),static_cast<float> (wallHeight2) };
 
-void DrawPers(int x,int y) {
+void DrawPers(int x, int y) {
 	DrawRectangle(x, y, 50, 50, BLUE);
-	
+
 }
 
 
 
-bool CollAll() {
-	if (CheckCollisionRecs(playerRect, wallRect2) || CheckCollisionRecs(playerRect, wallRect1) || CheckCollisionRecs(playerRect, ButtonRect) || CheckCollisionRecs(playerRect, EnemyRect) || CheckCollisionRecs(playerRect, KeyRect) || CheckCollisionRecs(playerRect, DoorRect))
-	{
-		return(true);
-	}
-	
-}
+
 
 void DrawMenu()
 {
@@ -66,14 +61,15 @@ void DrawMenu()
 	ClearBackground(BLACK);
 	DrawRectangle(300, 300, 200, 100, RED);
 	DrawText("PLAY", 320, 320, 60, BLUE);
-	
+
 }
 
-int main() 
+
+int main()
 {
 	int WeightScreen = 800;
 	int HeightScreen = 600;
-	InitWindow(WeightScreen,HeightScreen,"test");
+	InitWindow(WeightScreen, HeightScreen, "test");
 	SetTargetFPS(60);
 	int playerX = 400, playerY = 500;
 	int SpeedPlayer = 5;
@@ -110,8 +106,8 @@ int main()
 	bool PlayerLose = false;
 	bool GameVoid = true;
 	bool mouseOnbtn = false;
-	
-	
+
+
 	while (!WindowShouldClose()) {
 		Vector2 mpos = { -10.0f,-10.0f };
 		mpos = GetMousePosition();
@@ -122,18 +118,18 @@ int main()
 		{
 			GameStart = true;
 		}
-		
+
 		if (IsKeyPressed(KEY_UP) && !isJumping) {
 			isJumping = true;
 			velocityY = -Jump;
 		}
-		if (!PlayerLose || !PlayerWin){
-			if (IsKeyDown(KEY_RIGHT) && playerX<WeightScreen - playerWeight) { playerX += SpeedPlayer; }
-			if (IsKeyDown(KEY_LEFT)&& playerX > 0) { playerX -= SpeedPlayer; }
+		if (!PlayerLose || !PlayerWin) {
+			if (IsKeyDown(KEY_RIGHT) && playerX < WeightScreen - playerWeight) { playerX += SpeedPlayer; }
+			if (IsKeyDown(KEY_LEFT) && playerX > 0) { playerX -= SpeedPlayer; }
 		}
-		
 
-		
+
+
 		Rectangle KeyRect = { static_cast<float>(KeyX),static_cast<float> (KeyY),static_cast<float> (20),static_cast<float> (20) };
 		Rectangle playerRect = { static_cast<float>(playerX),static_cast<float>(playerY),static_cast<float> (playerWeight),static_cast<float>(playerHeight) };
 		Rectangle ButtonRect = { static_cast<float>(ButtonX),static_cast<float>(ButtonY),static_cast<float> (40),static_cast<float>(40) };
@@ -141,67 +137,77 @@ int main()
 		Rectangle EnemyRect = { static_cast<float> (EnemyX),static_cast<float> (EnemyY),static_cast<float>(30),static_cast<float>(30) };
 		Rectangle wallRect1 = { static_cast<float> (wallX),static_cast<float> (wallY),static_cast<float> (wallWeight),static_cast<float> (wallHeight) };
 		Rectangle wallRect2 = { static_cast<float> (wallX2),static_cast<float> (wallY2),static_cast<float> (wallWeight2),static_cast<float> (wallHeight2) };
-		
+
 
 		if (CheckCollisionRecs(playerRect, wallRect1))
 		{
 			if (IsKeyDown(KEY_RIGHT) && playerX < WeightScreen - playerWeight) { playerX -= SpeedPlayer; }
 			if (IsKeyDown(KEY_LEFT) && playerX > 0) { playerX += SpeedPlayer; }
 		}
-		if (CheckCollisionRecs(playerRect, wallRect1) && playerY < wallY)
+
+		if (CheckCollisionRecs(playerRect, wallRect1) && playerY < wallY - playerHeight)
 		{
-			playerY = wallY - playerHeight;
-			
 			isJumping = false;
+			playerY = wallY - wallHeight;
+
+			
 			if (IsKeyPressed(KEY_UP) && !isJumping) {
 				isJumping = true;
 				velocityY = -Jump;
 			}
 		}
-		if (CheckCollisionRecs(playerRect, wallRect2) && playerY < wallY2)
+		
+		
+
+		
+		
+
+		if (CheckCollisionRecs(playerRect, wallRect2) && playerY < wallY2 - wallHeight2 )
 		{
+			
 			isJumping = false;
-			playerY = wallY2 - wallHeight2 - 50;
+			playerY = wallY2 - wallHeight2 ;
 			
-			
+
 			if (IsKeyPressed(KEY_UP) && !isJumping) {
+				
 				isJumping = true;
 				velocityY = -Jump;
 			}
-			
+
 		}
-		else if(isJumping == false && !CheckCollisionRecs(playerRect, wallRect2) && playerY < wallY2)
+		else if (isJumping == false && !CheckCollisionRecs(playerRect, wallRect2) && playerY < wallY2)
 		{
 			
 			if (playerY >= wallY2 - wallHeight2 - playerHeight) {
-				playerY = wallY2 - wallHeight2 - playerHeight;
+				playerY = wallY2 - playerHeight - wallHeight2 ;
 				isJumping = false;
 			}
 		}
-		if (!CheckCollisionRecs(playerRect, wallRect2) && isJumping == false ) {
+		if (!CheckCollisionRecs(playerRect, wallRect2) && isJumping == false && !CheckCollisionRecs(playerRect, wallRect1)) {
 			playerY += velocityY;
 			velocityY += gravity;
 
 
 			if (playerY >= HeightScreen - playerHeight) {
-				playerY = HeightScreen - playerHeight - 50;
+				playerY = HeightScreen - playerHeight -50;
 				isJumping = false;
 			}
 		}
 
-		
-		
+
+
 		if (CheckCollisionRecs(playerRect, ButtonRect) && ButtonDown == false && GameStart)
 		{
 			KeyX = 400;
 			ButtonY += 8;
 			ButtonDown = true;
-		} 
+		}
 		if (CheckCollisionRecs(playerRect, EnemyRect)) {
 			PlayerLose = true;
 			DrawText("You Lose", 300, 200, 48, RED);
 		}
-		
+
 		if (CheckCollisionRecs(playerRect, KeyRect) && GameStart) {
 			ExitDoorOpen = true;
 			KeyX += 2000;
@@ -212,7 +218,7 @@ int main()
 		if (CheckCollisionRecs(playerRect, DoorRect) && GameStart) {
 			DrawText("You Win", 300, 200, 48, RED);
 			PlayerWin = true;
-			
+
 		}
 
 		if (isJumping) {
@@ -224,11 +230,15 @@ int main()
 				playerY = HeightScreen - playerHeight - 50;
 				isJumping = false;
 			}
-			if ((playerY >= wallY2 - wallHeight2 - playerHeight) && CheckCollisionRecs(playerRect, wallRect2)) {
-				playerY = wallY2 - wallHeight2 - playerHeight;
+			if ((playerY >= wallY2 - wallHeight2) && CheckCollisionRecs(playerRect, wallRect2)) {
+				playerY = wallY2  - playerHeight - wallHeight2;
 				isJumping = false;
 			}
-			
+			if ((playerY >= wallY - wallHeight) && CheckCollisionRecs(playerRect, wallRect1)) {
+				playerY = wallY - playerHeight;
+				isJumping = false;
+			}
+
 		}
 		if (ExitDoorOpen && GameStart) {
 			DrawRectangle(DoorX, DoorY, 70, 100, BLACK);
@@ -236,12 +246,37 @@ int main()
 		if (ButtonDown && GameStart) {
 			DrawRectangle(KeyX, KeyY, 20, 20, GOLD);
 		}
-		
+
+		if (GameStart) {
+			if (enemyXmax) {
+				if (EnemyX < 200)
+				{
+					EnemyX += enemySpeed;
+				}
+				else {
+					enemyXmax = false;
+					enemyxmax = true;
+				}
+			}
+			if (enemyxmax) {
+				if (EnemyX > 50)
+				{
+					EnemyX -= enemySpeed;
+				}
+				else {
+					enemyXmax = true;
+					enemyxmax = false;
+				}
+			}
+		}
+
+
+
 		if (GameVoid) {
 			BeginDrawing();
-			if (!GameStart) { 
+			if (!GameStart) {
 				DrawMenu();
-				
+
 			}
 			if (GameStart) {
 				
@@ -253,34 +288,35 @@ int main()
 				DrawRectangle(0, 550, 800, 50, GREEN);
 				DrawRectangle(wallX, wallY, wallWeight, wallHeight, GREEN);
 				DrawRectangle(wallX2, wallY2, wallWeight2, wallHeight2, GREEN);
+				
 			}
-			
+
 			if (PlayerWin) {
 				if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && mouseOnbtn)
 				{
 
-					
+
 					CloseWindow();
 					main();
 				}
-				
-			
-				
-					
+
+
+
+
 				GameStart = false;
-				
-				
-				
-			
+
+
+
+
 			}
 			if (PlayerLose) {
-				
-				
-					
+
+
+
 				GameStart = false;
 				CloseWindow();
 				main();
-				
+
 
 			}
 			EndDrawing();
