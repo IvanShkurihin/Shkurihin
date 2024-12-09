@@ -87,7 +87,7 @@ int main()
 	int DoorY = 450;
 	int EnemyX = 200;
 	int EnemyY = 510;
-	int enemySpeed = 4;
+	int enemySpeed = 2;
 
 	int wallX = 600;
 	int wallY = 250;
@@ -106,6 +106,8 @@ int main()
 	bool PlayerLose = false;
 	bool GameVoid = true;
 	bool mouseOnbtn = false;
+	bool Firstlvlchange = false;
+	bool Secondlvlchange = false;
 
 
 	while (!WindowShouldClose()) {
@@ -141,21 +143,25 @@ int main()
 
 		if (CheckCollisionRecs(playerRect, wallRect1))
 		{
-			if (IsKeyDown(KEY_RIGHT) && playerX < WeightScreen - playerWeight) { playerX -= SpeedPlayer; }
-			if (IsKeyDown(KEY_LEFT) && playerX > 0) { playerX += SpeedPlayer; }
+			if (IsKeyDown(KEY_RIGHT) ) { playerX -= SpeedPlayer; }
+			if (IsKeyDown(KEY_LEFT) ) { playerX += SpeedPlayer; }
 		}
 
-		if (CheckCollisionRecs(playerRect, wallRect1) && playerY < wallY - playerHeight)
+		if (CheckCollisionRecs(playerRect, wallRect1) && playerY < wallY + playerHeight)
 		{
-			isJumping = false;
-			playerY = wallY - wallHeight;
-
 			
+			
+			playerY = wallY - playerHeight;
+			isJumping = false;
+			velocityY = 0;
+
 			if (IsKeyPressed(KEY_UP) && !isJumping) {
 				isJumping = true;
 				velocityY = -Jump;
 			}
 		}
+		
+		
 		
 		
 
@@ -166,7 +172,7 @@ int main()
 		{
 			
 			isJumping = false;
-			playerY = wallY2 - wallHeight2 ;
+			playerY = wallY2 - wallHeight2;
 			
 
 			if (IsKeyPressed(KEY_UP) && !isJumping) {
@@ -176,7 +182,7 @@ int main()
 			}
 
 		}
-		else if (isJumping == false && !CheckCollisionRecs(playerRect, wallRect2) && playerY < wallY2)
+		else if (isJumping == false && !CheckCollisionRecs(playerRect, wallRect2) && playerY < wallY2 && !CheckCollisionRecs(playerRect, wallRect1))
 		{
 			
 			if (playerY >= wallY2 - wallHeight2 - playerHeight) {
@@ -184,6 +190,22 @@ int main()
 				isJumping = false;
 			}
 		}
+		if (CheckCollisionRecs(playerRect, wallRect2) && playerY > wallY2  )
+		{
+			playerY = wallY2 + playerHeight;
+			velocityY = 0;
+			isJumping = false;
+			
+		}
+		if (CheckCollisionRecs(playerRect, wallRect2) && (325<playerY))
+		{
+			if (IsKeyDown(KEY_RIGHT)) { playerX -= SpeedPlayer; }
+			if (IsKeyDown(KEY_LEFT)) { playerX += SpeedPlayer; }
+		}
+
+
+
+
 		if (!CheckCollisionRecs(playerRect, wallRect2) && isJumping == false && !CheckCollisionRecs(playerRect, wallRect1)) {
 			playerY += velocityY;
 			velocityY += gravity;
@@ -191,7 +213,7 @@ int main()
 
 			if (playerY >= HeightScreen - playerHeight) {
 				playerY = HeightScreen - playerHeight -50;
-				isJumping = false;
+				
 			}
 		}
 
@@ -225,7 +247,10 @@ int main()
 			playerY += velocityY;
 			velocityY += gravity;
 
-
+			if (playerY <= -HeightScreen + playerHeight) {
+				playerY = -HeightScreen + playerHeight + 50;
+				
+			}
 			if (playerY >= HeightScreen - playerHeight) {
 				playerY = HeightScreen - playerHeight - 50;
 				isJumping = false;
@@ -235,8 +260,9 @@ int main()
 				isJumping = false;
 			}
 			if ((playerY >= wallY - wallHeight) && CheckCollisionRecs(playerRect, wallRect1)) {
-				playerY = wallY - playerHeight;
 				isJumping = false;
+				playerY = wallY - playerHeight - 50 ;
+				
 			}
 
 		}
@@ -324,4 +350,10 @@ int main()
 	}
 	CloseWindow();
 	return 0;
+
+
+
+
+	
+
 }
