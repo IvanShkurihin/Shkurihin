@@ -37,6 +37,7 @@ bool PlayerWin = false;
 bool PlayerLose = false;
 bool GameVoid = true;
 bool GameStart = false;
+bool lvlmenu = false;
 
 Rectangle KeyRect = { static_cast<float>(KeyX),static_cast<float> (KeyY),static_cast<float> (20),static_cast<float> (20) };
 Rectangle playerRect = { static_cast<float>(playerX),static_cast<float>(playerY),static_cast<float> (playerWeight),static_cast<float>(playerHeight) };
@@ -51,18 +52,44 @@ void DrawPers(int x, int y) {
 
 }
 
-
-
-
-
 void DrawMenu()
 {
 
-	ClearBackground(BLACK);
+	ClearBackground(LIGHTGRAY);
 	DrawRectangle(300, 300, 200, 100, RED);
 	DrawText("PLAY", 320, 320, 60, BLUE);
 
 }
+
+void DrawLvlMenu()
+{
+	
+	
+
+	ClearBackground(DARKGRAY);
+	DrawRectangle(100, 100, 100, 100, DARKBLUE);
+	DrawText("1", 145, 130, 50, WHITE);
+}
+
+void DrawFirst()
+{
+	int WeightScreen = 800;
+	int HeightScreen = 600;
+	InitWindow(WeightScreen, HeightScreen, "test");
+	SetTargetFPS(60);
+	while (!WindowShouldClose()) {
+		ClearBackground(RAYWHITE);
+		DrawPers(playerX, playerY);
+		DrawRectangle(EnemyX, EnemyY, 40, 40, RED);
+		DrawRectangle(ButtonX, ButtonY, 40, 40, RED);
+		DrawRectangle(480, 540, 60, 40, GRAY);
+		DrawRectangle(0, 550, 800, 50, GREEN);
+		DrawRectangle(wallX, wallY, wallWeight, wallHeight, GREEN);
+		DrawRectangle(wallX2, wallY2, wallWeight2, wallHeight2, GREEN);
+	}
+	CloseWindow();
+}
+
 
 
 int main()
@@ -106,9 +133,11 @@ int main()
 	bool PlayerLose = false;
 	bool GameVoid = true;
 	bool mouseOnbtn = false;
+	bool mouseOnbtn2 = false;
 	bool Firstlvlchange = false;
 	bool Secondlvlchange = false;
 
+	
 
 	while (!WindowShouldClose()) {
 		Vector2 mpos = { -10.0f,-10.0f };
@@ -116,11 +145,25 @@ int main()
 		if ((mpos.x >= 300) && (mpos.y <= 400) && (mpos.x <= 500) && (mpos.y >= 300)) {
 			mouseOnbtn = true;
 		}
-		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && GameStart == false && mouseOnbtn)
-		{
-			GameStart = true;
+
+		if ((mpos.x >= 100) && (mpos.y <= 200) && (mpos.x <= 200) && (mpos.y >= 100)) {
+			mouseOnbtn2 = true;
 		}
 
+		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && GameStart == false && mouseOnbtn)
+		{
+			
+			lvlmenu = true;
+		}
+		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && GameStart == false && mouseOnbtn2)
+		{
+			lvlmenu = false;
+			Firstlvlchange = true;
+			
+		}
+		if (lvlmenu) {
+			DrawLvlMenu();
+		}
 		if (IsKeyPressed(KEY_UP) && !isJumping) {
 			isJumping = true;
 			velocityY = -Jump;
@@ -143,14 +186,14 @@ int main()
 
 		if (CheckCollisionRecs(playerRect, wallRect1))
 		{
-			if (IsKeyDown(KEY_RIGHT) ) { playerX -= SpeedPlayer; }
-			if (IsKeyDown(KEY_LEFT) ) { playerX += SpeedPlayer; }
+			if (IsKeyDown(KEY_RIGHT)) { playerX -= SpeedPlayer; }
+			if (IsKeyDown(KEY_LEFT)) { playerX += SpeedPlayer; }
 		}
 
 		if (CheckCollisionRecs(playerRect, wallRect1) && playerY < wallY + playerHeight)
 		{
-			
-			
+
+
 			playerY = wallY - playerHeight;
 			isJumping = false;
 			velocityY = 0;
@@ -160,23 +203,23 @@ int main()
 				velocityY = -Jump;
 			}
 		}
-		
-		
-		
-		
 
-		
-		
 
-		if (CheckCollisionRecs(playerRect, wallRect2) && playerY < wallY2 - wallHeight2 )
+
+
+
+
+
+
+		if (CheckCollisionRecs(playerRect, wallRect2) && playerY < wallY2 - wallHeight2)
 		{
-			
+
 			isJumping = false;
 			playerY = wallY2 - wallHeight2;
-			
+
 
 			if (IsKeyPressed(KEY_UP) && !isJumping) {
-				
+
 				isJumping = true;
 				velocityY = -Jump;
 			}
@@ -184,20 +227,20 @@ int main()
 		}
 		else if (isJumping == false && !CheckCollisionRecs(playerRect, wallRect2) && playerY < wallY2 && !CheckCollisionRecs(playerRect, wallRect1))
 		{
-			
+
 			if (playerY >= wallY2 - wallHeight2 - playerHeight) {
-				playerY = wallY2 - playerHeight - wallHeight2 ;
+				playerY = wallY2 - playerHeight - wallHeight2;
 				isJumping = false;
 			}
 		}
-		if (CheckCollisionRecs(playerRect, wallRect2) && playerY > wallY2  )
+		if (CheckCollisionRecs(playerRect, wallRect2) && playerY > wallY2)
 		{
 			playerY = wallY2 + playerHeight;
 			velocityY = 0;
 			isJumping = false;
-			
+
 		}
-		if (CheckCollisionRecs(playerRect, wallRect2) && (325<playerY))
+		if (CheckCollisionRecs(playerRect, wallRect2) && (325 < playerY))
 		{
 			if (IsKeyDown(KEY_RIGHT)) { playerX -= SpeedPlayer; }
 			if (IsKeyDown(KEY_LEFT)) { playerX += SpeedPlayer; }
@@ -212,8 +255,8 @@ int main()
 
 
 			if (playerY >= HeightScreen - playerHeight) {
-				playerY = HeightScreen - playerHeight -50;
-				
+				playerY = HeightScreen - playerHeight - 50;
+
 			}
 		}
 
@@ -249,20 +292,20 @@ int main()
 
 			if (playerY <= -HeightScreen + playerHeight) {
 				playerY = -HeightScreen + playerHeight + 50;
-				
+
 			}
 			if (playerY >= HeightScreen - playerHeight) {
 				playerY = HeightScreen - playerHeight - 50;
 				isJumping = false;
 			}
 			if ((playerY >= wallY2 - wallHeight2) && CheckCollisionRecs(playerRect, wallRect2)) {
-				playerY = wallY2  - playerHeight - wallHeight2;
+				playerY = wallY2 - playerHeight - wallHeight2;
 				isJumping = false;
 			}
 			if ((playerY >= wallY - wallHeight) && CheckCollisionRecs(playerRect, wallRect1)) {
 				isJumping = false;
-				playerY = wallY - playerHeight - 50 ;
-				
+				playerY = wallY - playerHeight - 50;
+
 			}
 
 		}
@@ -300,36 +343,26 @@ int main()
 
 		if (GameVoid) {
 			BeginDrawing();
-			if (!GameStart) {
+			if (!lvlmenu ) {
 				DrawMenu();
 
 			}
-			if (GameStart) {
-				
-				ClearBackground(RAYWHITE);
-				DrawPers(playerX, playerY);
-				DrawRectangle(EnemyX, EnemyY, 40, 40, RED);
-				DrawRectangle(ButtonX, ButtonY, 40, 40, RED);
-				DrawRectangle(480, 540, 60, 40, GRAY);
-				DrawRectangle(0, 550, 800, 50, GREEN);
-				DrawRectangle(wallX, wallY, wallWeight, wallHeight, GREEN);
-				DrawRectangle(wallX2, wallY2, wallWeight2, wallHeight2, GREEN);
-				
+			if (Firstlvlchange) {
+				CloseWindow();
+				DrawFirst();
 			}
 
 			if (PlayerWin) {
-				if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && mouseOnbtn)
-				{
-
-
-					CloseWindow();
-					main();
-				}
-
-
-
-
+				
 				GameStart = false;
+				CloseWindow();
+				main();
+				
+
+
+
+
+				
 
 
 
@@ -351,9 +384,9 @@ int main()
 	CloseWindow();
 	return 0;
 
-
-
-
 	
+
+
+
 
 }
