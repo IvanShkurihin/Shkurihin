@@ -1,6 +1,13 @@
 #include "raylib.h"
 #include"cstdlib"
 
+class levels
+{
+public:
+	void DrawFirst();
+
+};
+
 int playerX = 400, playerY = 500;
 int SpeedPlayer = 5;
 int playerWeight = 50, playerHeight = 50;
@@ -38,6 +45,8 @@ bool PlayerLose = false;
 bool GameVoid = true;
 bool GameStart = false;
 bool lvlmenu = false;
+bool mouseOnbtn2 = false;
+bool Firstlvlchange = false;
 
 Rectangle KeyRect = { static_cast<float>(KeyX),static_cast<float> (KeyY),static_cast<float> (20),static_cast<float> (20) };
 Rectangle playerRect = { static_cast<float>(playerX),static_cast<float>(playerY),static_cast<float> (playerWeight),static_cast<float>(playerHeight) };
@@ -63,41 +72,40 @@ void DrawMenu()
 
 void DrawLvlMenu()
 {
-	
-	
-
-	ClearBackground(DARKGRAY);
-	DrawRectangle(100, 100, 100, 100, DARKBLUE);
-	DrawText("1", 145, 130, 50, WHITE);
-}
-
-void DrawFirst()
-{
+	lvlmenu = true;
+	levels levels;
 	int WeightScreen = 800;
 	int HeightScreen = 600;
 	InitWindow(WeightScreen, HeightScreen, "test");
 	SetTargetFPS(60);
 	while (!WindowShouldClose()) {
-		ClearBackground(RAYWHITE);
-		DrawPers(playerX, playerY);
-		DrawRectangle(EnemyX, EnemyY, 40, 40, RED);
-		DrawRectangle(ButtonX, ButtonY, 40, 40, RED);
-		DrawRectangle(480, 540, 60, 40, GRAY);
-		DrawRectangle(0, 550, 800, 50, GREEN);
-		DrawRectangle(wallX, wallY, wallWeight, wallHeight, GREEN);
-		DrawRectangle(wallX2, wallY2, wallWeight2, wallHeight2, GREEN);
+		Vector2 mpos = { -10.0f,-10.0f };
+		mpos = GetMousePosition();
+		if ((mpos.x >= 100) && (mpos.y <= 200) && (mpos.x <= 200) && (mpos.y >= 100)) {
+			mouseOnbtn2 = true;
+		}
+		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && mouseOnbtn2)
+		{
+			lvlmenu = false;
+			CloseWindow();
+			levels.DrawFirst();
+			
+
+		}
+		BeginDrawing();
+		ClearBackground(DARKGRAY);
+		DrawRectangle(100, 100, 100, 100, DARKBLUE);
+		DrawText("1", 145, 130, 50, WHITE);
+		EndDrawing();
 	}
 	CloseWindow();
 }
 
 
-
-int main()
+void levels::DrawFirst()
 {
 	int WeightScreen = 800;
 	int HeightScreen = 600;
-	InitWindow(WeightScreen, HeightScreen, "test");
-	SetTargetFPS(60);
 	int playerX = 400, playerY = 500;
 	int SpeedPlayer = 5;
 	int playerWeight = 50, playerHeight = 50;
@@ -134,36 +142,10 @@ int main()
 	bool GameVoid = true;
 	bool mouseOnbtn = false;
 	bool mouseOnbtn2 = false;
-	bool Firstlvlchange = false;
-	bool Secondlvlchange = false;
-
-	
-
+	InitWindow(WeightScreen, HeightScreen, "test");
+	SetTargetFPS(60);
 	while (!WindowShouldClose()) {
-		Vector2 mpos = { -10.0f,-10.0f };
-		mpos = GetMousePosition();
-		if ((mpos.x >= 300) && (mpos.y <= 400) && (mpos.x <= 500) && (mpos.y >= 300)) {
-			mouseOnbtn = true;
-		}
-
-		if ((mpos.x >= 100) && (mpos.y <= 200) && (mpos.x <= 200) && (mpos.y >= 100)) {
-			mouseOnbtn2 = true;
-		}
-
-		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && GameStart == false && mouseOnbtn)
-		{
-			
-			lvlmenu = true;
-		}
-		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && GameStart == false && mouseOnbtn2)
-		{
-			lvlmenu = false;
-			Firstlvlchange = true;
-			
-		}
-		if (lvlmenu) {
-			DrawLvlMenu();
-		}
+		GameStart = true;
 		if (IsKeyPressed(KEY_UP) && !isJumping) {
 			isJumping = true;
 			velocityY = -Jump;
@@ -305,7 +287,6 @@ int main()
 			if ((playerY >= wallY - wallHeight) && CheckCollisionRecs(playerRect, wallRect1)) {
 				isJumping = false;
 				playerY = wallY - playerHeight - 50;
-
 			}
 
 		}
@@ -338,31 +319,119 @@ int main()
 				}
 			}
 		}
+		BeginDrawing();
+		ClearBackground(RAYWHITE);
+		DrawPers(playerX, playerY);
+		DrawRectangle(EnemyX, EnemyY, 40, 40, RED);
+		DrawRectangle(ButtonX, ButtonY, 40, 40, RED);
+		DrawRectangle(480, 540, 60, 40, GRAY);
+		DrawRectangle(0, 550, 800, 50, GREEN);
+		DrawRectangle(wallX, wallY, wallWeight, wallHeight, GREEN);
+		DrawRectangle(wallX2, wallY2, wallWeight2, wallHeight2, GREEN);
+		EndDrawing();
+		if (PlayerWin) {
+			
+			GameStart = false;
+			CloseWindow();
+			DrawLvlMenu();
+			
+			
+
+
+
+
+
+
+
+
+		}
+		if (PlayerLose) {
+
+
+			
+			GameStart = false;
+			CloseWindow();
+			DrawLvlMenu();
+			
+			
+		}
+	}
+	CloseWindow();
+}
+
+
+
+ int main()
+{
+	int WeightScreen = 800;
+	int HeightScreen = 600;
+	InitWindow(WeightScreen, HeightScreen, "test");
+	SetTargetFPS(60);
+	
+	bool PlayerWin = false;
+	bool PlayerLose = false;
+	bool GameVoid = true;
+	bool mouseOnbtn = false;
+	bool mouseOnbtn2 = false;
+	bool Firstlvlchange = false;
+	bool Secondlvlchange = false;
+
+
+
+	while (!WindowShouldClose()) {
+		levels level;
+		Vector2 mpos = { -10.0f,-10.0f };
+		mpos = GetMousePosition();
+		if ((mpos.x >= 300) && (mpos.y <= 400) && (mpos.x <= 500) && (mpos.y >= 300)) {
+			mouseOnbtn = true;
+		}
+
+		if ((mpos.x >= 100) && (mpos.y <= 200) && (mpos.x <= 200) && (mpos.y >= 100)) {
+			mouseOnbtn2 = true;
+		}
+
+		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && GameStart == false && mouseOnbtn)
+		{
+
+			lvlmenu = true;
+		}
+		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && GameStart == false && mouseOnbtn2)
+		{
+			lvlmenu = false;
+			Firstlvlchange = true;
+
+		}
+		if (lvlmenu) {
+			CloseWindow();
+			DrawLvlMenu();
+		}
+		
 
 
 
 		if (GameVoid) {
 			BeginDrawing();
-			if (!lvlmenu ) {
+			if (!lvlmenu) {
 				DrawMenu();
 
 			}
 			if (Firstlvlchange) {
 				CloseWindow();
-				DrawFirst();
+				level.DrawFirst();
+				
 			}
 
 			if (PlayerWin) {
-				
+
 				GameStart = false;
 				CloseWindow();
 				main();
-				
 
 
 
 
-				
+
+
 
 
 
@@ -384,9 +453,10 @@ int main()
 	CloseWindow();
 	return 0;
 
-	
+
 
 
 
 
 }
+
