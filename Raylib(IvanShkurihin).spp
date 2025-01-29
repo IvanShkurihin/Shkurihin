@@ -5,7 +5,9 @@ class levels
 {
 public:
 	void DrawFirst();
-
+	void DrawSecond();
+	void DrawThird();
+	void DrawFourth();
 };
 
 int playerX = 400, playerY = 500;
@@ -38,6 +40,12 @@ int wallHeight2 = 50;
 bool enemyXmax = true;
 bool enemyxmax = false;
 
+bool enemyXmax2 = true;
+bool enemyxmax2 = false;
+
+bool enemyYmax = true;
+bool enemyymax = false;
+
 bool ButtonDown = false;
 bool ExitDoorOpen = false;
 bool PlayerWin = false;
@@ -46,6 +54,9 @@ bool GameVoid = true;
 bool GameStart = false;
 bool lvlmenu = false;
 bool mouseOnbtn2 = false;
+bool mouseOnbtn3 = false;
+bool mouseOnbtn4 = false;
+bool mouseOnbtn5 = false;
 bool Firstlvlchange = false;
 
 Rectangle KeyRect = { static_cast<float>(KeyX),static_cast<float> (KeyY),static_cast<float> (20),static_cast<float> (20) };
@@ -87,15 +98,60 @@ void DrawLvlMenu()
 		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && mouseOnbtn2)
 		{
 			lvlmenu = false;
+			mouseOnbtn2 = false;
 			CloseWindow();
 			levels.DrawFirst();
 			
+
+		}
+		if ((mpos.x >= 300) && (mpos.y <= 200) && (mpos.x <= 400) && (mpos.y >= 100)) {
+			mouseOnbtn3 = true;
+		}
+		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && mouseOnbtn3)
+		{
+			lvlmenu = false;
+			mouseOnbtn3 = false;
+			CloseWindow();
+			levels.DrawSecond();
+
+
+		}
+		if ((mpos.x >= 500) && (mpos.y <= 200) && (mpos.x <= 600) && (mpos.y >= 100)) {
+			mouseOnbtn4 = true;
+		}
+		
+		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && mouseOnbtn4)
+		{
+			lvlmenu = false;
+			mouseOnbtn4 = false;
+			CloseWindow();
+			levels.DrawThird();
+
+
+		}
+		
+		if ((mpos.x >= 100) && (mpos.y <= 400) && (mpos.x <= 200) && (mpos.y >= 300)) {
+			mouseOnbtn5 = true;
+		}
+		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && mouseOnbtn5)
+		{
+			lvlmenu = false;
+			mouseOnbtn5 = false;
+			CloseWindow();
+			levels.DrawFourth();
+
 
 		}
 		BeginDrawing();
 		ClearBackground(DARKGRAY);
 		DrawRectangle(100, 100, 100, 100, DARKBLUE);
 		DrawText("1", 145, 130, 50, WHITE);
+		DrawRectangle(300, 100, 100, 100, DARKBLUE);
+		DrawText("2", 340, 130, 50, WHITE);
+		DrawRectangle(500, 100, 100, 100, DARKBLUE);
+		DrawText("3", 535, 130, 50, WHITE);
+		DrawRectangle(100, 300, 100, 100, DARKBLUE);
+		DrawText("4", 140, 330, 50, WHITE);
 		EndDrawing();
 	}
 	CloseWindow();
@@ -118,6 +174,8 @@ void levels::DrawFirst()
 	int gravity = 5;
 	int velocityY = 0;
 
+	
+
 	int DoorX = 2000;
 	int DoorY = 450;
 	int EnemyX = 200;
@@ -136,6 +194,7 @@ void levels::DrawFirst()
 
 
 	bool ButtonDown = false;
+	
 	bool ExitDoorOpen = false;
 	bool PlayerWin = false;
 	bool PlayerLose = false;
@@ -358,6 +417,1032 @@ void levels::DrawFirst()
 	}
 	CloseWindow();
 }
+void levels::DrawSecond()
+{
+	int WeightScreen = 800;
+	int HeightScreen = 600;
+	int playerX = 400, playerY = 500;
+	int SpeedPlayer = 5;
+	int playerWeight = 50, playerHeight = 50;
+	int Jump = 50;
+	int ButtonY = 530;
+	int ButtonX = 490;
+	int KeyX = 2000;
+	int KeyY = 300;
+	bool isJumping = false;
+	int gravity = 5;
+	int velocityY = 0;
+
+	int ButtonY2 = 330;
+	int ButtonX2 = 250;
+
+
+	int DoorX = 2000;
+	int DoorY = 450;
+	int EnemyX = 200;
+	int EnemyY = 310;
+	int enemySpeed = 5;
+
+	int wallX = 600;
+	int wallY = 0;
+	int wallWeight = 50;
+	int wallHeight = 400;
+
+	int wallX2 = 200;
+	int wallY2 = 350;
+	int wallWeight2 = 300;
+	int wallHeight2 = 50;
+	int btnwallY = 400;
+	bool ButtonDown2 = false;
+	bool ButtonDown = false;
+	bool ExitDoorOpen = false;
+	bool PlayerWin = false;
+	bool PlayerLose = false;
+	bool GameVoid = true;
+	bool mouseOnbtn = false;
+	bool mouseOnbtn2 = false;
+	InitWindow(WeightScreen, HeightScreen, "test");
+	SetTargetFPS(60);
+	while (!WindowShouldClose()) {
+		GameStart = true;
+		if (IsKeyPressed(KEY_UP) && !isJumping) {
+			isJumping = true;
+			velocityY = -Jump;
+		}
+		if (!PlayerLose || !PlayerWin) {
+			if (IsKeyDown(KEY_RIGHT) && playerX < WeightScreen - playerWeight) { playerX += SpeedPlayer; }
+			if (IsKeyDown(KEY_LEFT) && playerX > 0) { playerX -= SpeedPlayer; }
+		}
+
+
+
+		Rectangle KeyRect = { static_cast<float>(KeyX),static_cast<float> (KeyY),static_cast<float> (20),static_cast<float> (20) };
+		Rectangle playerRect = { static_cast<float>(playerX),static_cast<float>(playerY),static_cast<float> (playerWeight),static_cast<float>(playerHeight) };
+		Rectangle ButtonRect = { static_cast<float>(ButtonX),static_cast<float>(ButtonY),static_cast<float> (40),static_cast<float>(40) };
+		Rectangle DoorRect = { static_cast<float> (DoorX),static_cast<float> (DoorY),static_cast<float> (70),static_cast<float>(100) };
+		Rectangle EnemyRect = { static_cast<float> (EnemyX),static_cast<float> (EnemyY),static_cast<float>(30),static_cast<float>(30) };
+		Rectangle wallRect1 = { static_cast<float> (wallX),static_cast<float> (wallY),static_cast<float> (wallWeight),static_cast<float> (wallHeight) };
+		Rectangle wallRect2 = { static_cast<float> (wallX2),static_cast<float> (wallY2),static_cast<float> (wallWeight2),static_cast<float> (wallHeight2) };
+		Rectangle ButtonRect2 = { static_cast<float>(ButtonX2),static_cast<float>(ButtonY2),static_cast<float> (40),static_cast<float>(5) };
+		Rectangle btnwall = { static_cast<float>(wallX),static_cast<float>(btnwallY),static_cast<float> (wallWeight),static_cast<float>(150) };
+		
+
+		if (CheckCollisionRecs(playerRect, wallRect1))
+		{
+			if (IsKeyDown(KEY_RIGHT)) { playerX -= SpeedPlayer; }
+			if (IsKeyDown(KEY_LEFT)) { playerX += SpeedPlayer; }
+		}
+		if (CheckCollisionRecs(playerRect, btnwall))
+		{
+			if (IsKeyDown(KEY_RIGHT)) { playerX -= SpeedPlayer; }
+			if (IsKeyDown(KEY_LEFT)) { playerX += SpeedPlayer; }
+		}
+		if (CheckCollisionRecs(playerRect, wallRect1) && playerY < wallY + playerHeight)
+		{
+
+
+			playerY = wallY - playerHeight;
+			isJumping = false;
+			velocityY = 0;
+
+			if (IsKeyPressed(KEY_UP) && !isJumping) {
+				isJumping = true;
+				velocityY = -Jump;
+			}
+		}
+
+
+
+
+
+
+
+
+		if (CheckCollisionRecs(playerRect, wallRect2) && playerY < wallY2 - wallHeight2)
+		{
+
+			isJumping = false;
+			playerY = wallY2 - wallHeight2;
+
+
+			if (IsKeyPressed(KEY_UP) && !isJumping) {
+
+				isJumping = true;
+				velocityY = -Jump;
+			}
+
+		}
+		else if (isJumping == false && !CheckCollisionRecs(playerRect, wallRect2) && playerY < wallY2 && !CheckCollisionRecs(playerRect, wallRect1))
+		{
+
+			if (playerY >= wallY2 - wallHeight2 - playerHeight) {
+				playerY = wallY2 - playerHeight - wallHeight2;
+				isJumping = false;
+			}
+		}
+		if (CheckCollisionRecs(playerRect, wallRect2) && playerY > wallY2)
+		{
+			playerY = wallY2 + playerHeight;
+			velocityY = 0;
+			isJumping = false;
+
+
+		}
+		if (CheckCollisionRecs(playerRect, wallRect1) && playerY > wallY)
+		{
+			playerY = wallY + playerHeight + wallHeight;
+			velocityY = 0;
+			isJumping = false;
+
+		}
+
+		if (CheckCollisionRecs(playerRect, wallRect2) && (325 < playerY))
+		{
+			if (IsKeyDown(KEY_RIGHT)) { playerX -= SpeedPlayer; }
+			if (IsKeyDown(KEY_LEFT)) { playerX += SpeedPlayer; }
+		}
+
+
+
+
+		if (!CheckCollisionRecs(playerRect, wallRect2) && isJumping == false && !CheckCollisionRecs(playerRect, wallRect1)) {
+			playerY += velocityY;
+			velocityY += gravity;
+
+
+			if (playerY >= HeightScreen - playerHeight) {
+				playerY = HeightScreen - playerHeight - 50;
+
+			}
+		}
+
+
+
+		if (CheckCollisionRecs(playerRect, ButtonRect) && ButtonDown == false && GameStart)
+		{
+			KeyX = 400;
+			ButtonY += 8;
+			ButtonDown = true;
+		}
+		if (CheckCollisionRecs(playerRect, ButtonRect2) && ButtonDown2 == false && GameStart)
+		{
+			btnwallY += 4000;
+			ButtonY2 += 8;
+			ButtonDown2 = true;
+		}
+		if (CheckCollisionRecs(playerRect, EnemyRect)) {
+			PlayerLose = true;
+			DrawText("You Lose", 300, 200, 48, RED);
+		}
+
+		if (CheckCollisionRecs(playerRect, KeyRect) && GameStart) {
+			ExitDoorOpen = true;
+			KeyX += 2000;
+			DoorX = 730;
+		}
+
+
+		if (CheckCollisionRecs(playerRect, DoorRect) && GameStart) {
+			DrawText("You Win", 300, 200, 48, RED);
+			PlayerWin = true;
+
+		}
+
+		if (isJumping) {
+			playerY += velocityY;
+			velocityY += gravity;
+
+			if (playerY <= -HeightScreen + playerHeight) {
+				playerY = -HeightScreen + playerHeight + 50;
+
+			}
+			if (playerY >= HeightScreen - playerHeight) {
+				playerY = HeightScreen - playerHeight - 50;
+				isJumping = false;
+			}
+			if ((playerY >= wallY2 - wallHeight2) && CheckCollisionRecs(playerRect, wallRect2)) {
+				playerY = wallY2 - playerHeight - wallHeight2;
+				isJumping = false;
+			}
+			if ((playerY >= wallY - wallHeight) && CheckCollisionRecs(playerRect, wallRect1)) {
+				isJumping = false;
+				playerY = wallY - playerHeight - 50;
+			}
+
+		}
+		if (ExitDoorOpen && GameStart) {
+			DrawRectangle(DoorX, DoorY, 70, 100, BLACK);
+		}
+		if (ButtonDown && GameStart) {
+			DrawRectangle(KeyX, KeyY, 20, 20, GOLD);
+		}
+
+		if (GameStart) {
+			if (enemyXmax) {
+				if (EnemyX < 400)
+				{
+					EnemyX += enemySpeed;
+				}
+				else {
+					enemyXmax = false;
+					enemyxmax = true;
+				}
+			}
+			if (enemyxmax) {
+				if (EnemyX > 250)
+				{
+					EnemyX -= enemySpeed;
+				}
+				else {
+					enemyXmax = true;
+					enemyxmax = false;
+				}
+			}
+		}
+		BeginDrawing();
+		ClearBackground(RAYWHITE);
+		DrawPers(playerX, playerY);
+		DrawRectangle(EnemyX, EnemyY, 40, 40, RED);
+		DrawRectangle(ButtonX, ButtonY, 40, 40, RED);
+		DrawRectangle(480, 540, 60, 40, GRAY);
+		DrawRectangle(ButtonX2, ButtonY2, 40, 40, BLUE);
+		DrawRectangle(240, 340, 60, 40, GRAY);
+		DrawRectangle(0, 550, 800, 50, GREEN);
+		DrawRectangle(wallX, btnwallY, wallWeight, 150, BLUE);
+		DrawRectangle(wallX, wallY, wallWeight, wallHeight, GREEN);
+		DrawRectangle(wallX2, wallY2, wallWeight2, wallHeight2, GREEN);
+		EndDrawing();
+		if (PlayerWin) {
+
+			GameStart = false;
+			CloseWindow();
+			DrawLvlMenu();
+
+
+
+
+
+
+
+
+
+
+		}
+		if (PlayerLose) {
+
+
+
+			GameStart = false;
+			CloseWindow();
+			DrawLvlMenu();
+
+
+		}
+	}
+	CloseWindow();
+}
+void levels::DrawThird()
+{
+	int WeightScreen = 800;
+	int HeightScreen = 600;
+	int playerX = 400, playerY = 500;
+	int SpeedPlayer = 5;
+	int playerWeight = 50, playerHeight = 50;
+	int Jump = 50;
+	int ButtonY = 530;
+	int ButtonX = 50;
+	int KeyX = 2000;
+	int KeyY = 200;
+	bool isJumping = false;
+	int gravity = 5;
+	int velocityY = 0;
+
+	int ButtonY2 = 330;
+	int ButtonX2 = 250;
+
+
+	int DoorX = 2000;
+	int DoorY = 450;
+	int EnemyX = 200;
+	int EnemyY = 310;
+	int enemySpeed = 5;
+
+	int EnemyX2 = 100;
+	int EnemyY2 = 512;
+	int enemySpeed2 = 3;
+
+	int wallX = 600;
+	int wallY = 0;
+	int wallWeight = 50;
+	int wallHeight = 80;
+
+	int wallX2 = 600;
+	int wallY2 = 350;
+	int wallX3 = 200;
+	int wallY3 = 350;
+	int wallWeight2 = 300;
+	int wallHeight2 = 50;
+	int btnwallY = 400;
+	bool ButtonDown2 = false;
+	bool ButtonDown = false;
+	bool ExitDoorOpen = false;
+	bool PlayerWin = false;
+	bool PlayerLose = false;
+	bool GameVoid = true;
+	bool mouseOnbtn = false;
+	bool mouseOnbtn2 = false;
+	InitWindow(WeightScreen, HeightScreen, "test");
+	SetTargetFPS(60);
+	while (!WindowShouldClose()) {
+		GameStart = true;
+		if (IsKeyPressed(KEY_UP) && !isJumping) {
+			isJumping = true;
+			velocityY = -Jump;
+		}
+		if (!PlayerLose || !PlayerWin) {
+			if (IsKeyDown(KEY_RIGHT) && playerX < WeightScreen - playerWeight) { playerX += SpeedPlayer; }
+			if (IsKeyDown(KEY_LEFT) && playerX > 0) { playerX -= SpeedPlayer; }
+		}
+
+
+
+		Rectangle KeyRect = { static_cast<float>(KeyX),static_cast<float> (KeyY),static_cast<float> (20),static_cast<float> (20) };
+		Rectangle playerRect = { static_cast<float>(playerX),static_cast<float>(playerY),static_cast<float> (playerWeight),static_cast<float>(playerHeight) };
+		Rectangle ButtonRect = { static_cast<float>(ButtonX),static_cast<float>(ButtonY),static_cast<float> (40),static_cast<float>(40) };
+		Rectangle DoorRect = { static_cast<float> (DoorX),static_cast<float> (DoorY),static_cast<float> (70),static_cast<float>(100) };
+		Rectangle EnemyRect = { static_cast<float> (EnemyX),static_cast<float> (EnemyY),static_cast<float>(30),static_cast<float>(30) };
+		Rectangle wallRect1 = { static_cast<float> (wallX),static_cast<float> (wallY),static_cast<float> (wallWeight),static_cast<float> (wallHeight) };
+		Rectangle wallRect2 = { static_cast<float> (wallX2),static_cast<float> (wallY2),static_cast<float> (wallWeight2),static_cast<float> (wallHeight2) };
+		Rectangle ButtonRect2 = { static_cast<float>(ButtonX2),static_cast<float>(ButtonY2),static_cast<float> (40),static_cast<float>(5) };
+		Rectangle btnwall = { static_cast<float>(wallX),static_cast<float>(btnwallY),static_cast<float> (wallWeight),static_cast<float>(150) };
+		Rectangle wallRect3 = { static_cast<float> (wallX3),static_cast<float> (wallY3),static_cast<float> (wallWeight2),static_cast<float> (wallHeight2) };
+		Rectangle EnemyRect2 = { static_cast<float> (EnemyX2),static_cast<float> (EnemyY2),static_cast<float>(30),static_cast<float>(30) };
+
+		if (CheckCollisionRecs(playerRect, wallRect1))
+		{
+			if (IsKeyDown(KEY_RIGHT)) { playerX -= SpeedPlayer; }
+			if (IsKeyDown(KEY_LEFT)) { playerX += SpeedPlayer; }
+		}
+		if (CheckCollisionRecs(playerRect, btnwall))
+		{
+			if (IsKeyDown(KEY_RIGHT)) { playerX -= SpeedPlayer; }
+			if (IsKeyDown(KEY_LEFT)) { playerX += SpeedPlayer; }
+		}
+		if (CheckCollisionRecs(playerRect, wallRect1) && playerY < wallY + playerHeight)
+		{
+
+
+			playerY = wallY - playerHeight;
+			isJumping = false;
+			velocityY = 0;
+
+			if (IsKeyPressed(KEY_UP) && !isJumping) {
+				isJumping = true;
+				velocityY = -Jump;
+			}
+		}
+
+
+
+
+
+
+
+
+		if (CheckCollisionRecs(playerRect, wallRect2) && playerY < wallY2 - wallHeight2)
+		{
+
+			isJumping = false;
+			playerY = wallY2 - wallHeight2;
+
+
+			if (IsKeyPressed(KEY_UP) && !isJumping) {
+
+				isJumping = true;
+				velocityY = -Jump;
+			}
+
+		}
+		else if (isJumping == false && !CheckCollisionRecs(playerRect, wallRect2) && playerY < wallY2 && !CheckCollisionRecs(playerRect, wallRect1) && !CheckCollisionRecs(playerRect, wallRect3))
+		{
+
+			if (playerY >= wallY2 - wallHeight2 - playerHeight) {
+				playerY = wallY2 - playerHeight - wallHeight2;
+				isJumping = false;
+			}
+		}
+		if (CheckCollisionRecs(playerRect, wallRect2) && playerY > wallY2)
+		{
+			playerY = wallY2 + playerHeight;
+			velocityY = 0;
+			isJumping = false;
+
+
+		}
+
+		if (CheckCollisionRecs(playerRect, wallRect3) && playerY < wallY3 - wallHeight2)
+		{
+
+			isJumping = false;
+			playerY = wallY3 - wallHeight2;
+
+
+			if (IsKeyPressed(KEY_UP) && !isJumping) {
+
+				isJumping = true;
+				velocityY = -Jump;
+			}
+
+		}
+		else if (isJumping == false && !CheckCollisionRecs(playerRect, wallRect3) && playerY < wallY3 && !CheckCollisionRecs(playerRect, wallRect1) && !CheckCollisionRecs(playerRect, wallRect2))
+		{
+
+			if (playerY >= wallY3 - wallHeight2 - playerHeight) {
+				playerY = wallY3 - playerHeight - wallHeight2;
+				isJumping = false;
+			}
+		}
+		if (CheckCollisionRecs(playerRect, wallRect3) && playerY > wallY3)
+		{
+			playerY = wallY3 + playerHeight;
+			velocityY = 0;
+			isJumping = false;
+
+
+		}
+		if (CheckCollisionRecs(playerRect, wallRect3) && (325 < playerY))
+		{
+			if (IsKeyDown(KEY_RIGHT)) { playerX -= SpeedPlayer; }
+			if (IsKeyDown(KEY_LEFT)) { playerX += SpeedPlayer; }
+		}
+		if (CheckCollisionRecs(playerRect, wallRect1) && playerY > wallY)
+		{
+			playerY = wallY + playerHeight + wallHeight;
+			velocityY = 0;
+			isJumping = false;
+
+		}
+
+		if (CheckCollisionRecs(playerRect, wallRect2) && (325 < playerY))
+		{
+			if (IsKeyDown(KEY_RIGHT)) { playerX -= SpeedPlayer; }
+			if (IsKeyDown(KEY_LEFT)) { playerX += SpeedPlayer; }
+		}
+
+
+
+
+		if (!CheckCollisionRecs(playerRect, wallRect2) && isJumping == false && !CheckCollisionRecs(playerRect, wallRect1) && !CheckCollisionRecs(playerRect, wallRect3)) {
+			playerY += velocityY;
+			velocityY += gravity;
+
+
+			if (playerY >= HeightScreen - playerHeight) {
+				playerY = HeightScreen - playerHeight - 50;
+
+			}
+		}
+		
+
+
+
+		if (CheckCollisionRecs(playerRect, ButtonRect) && ButtonDown == false && GameStart)
+		{
+			KeyX = 700;
+			ButtonY += 8;
+			ButtonDown = true;
+		}
+		if (CheckCollisionRecs(playerRect, ButtonRect2) && ButtonDown2 == false && GameStart)
+		{
+			btnwallY += 4000;
+			ButtonY2 += 8;
+			ButtonDown2 = true;
+		}
+		if (CheckCollisionRecs(playerRect, EnemyRect)|| CheckCollisionRecs(playerRect, EnemyRect2)) {
+			PlayerLose = true;
+			DrawText("You Lose", 300, 200, 48, RED);
+		}
+
+		if (CheckCollisionRecs(playerRect, KeyRect) && GameStart) {
+			ExitDoorOpen = true;
+			KeyX += 2000;
+			DoorX = 730;
+		}
+
+
+		if (CheckCollisionRecs(playerRect, DoorRect) && GameStart) {
+			DrawText("You Win", 300, 200, 48, RED);
+			PlayerWin = true;
+
+		}
+
+		if (isJumping) {
+			playerY += velocityY;
+			velocityY += gravity;
+
+			if (playerY <= -HeightScreen + playerHeight) {
+				playerY = -HeightScreen + playerHeight + 50;
+
+			}
+			if (playerY >= HeightScreen - playerHeight) {
+				playerY = HeightScreen - playerHeight - 50;
+				isJumping = false;
+			}
+			if ((playerY >= wallY2 - wallHeight2) && CheckCollisionRecs(playerRect, wallRect2)) {
+				playerY = wallY2 - playerHeight - wallHeight2;
+				isJumping = false;
+			}
+			if ((playerY >= wallY3 - wallHeight2) && CheckCollisionRecs(playerRect, wallRect3)) {
+				playerY = wallY3 - playerHeight - wallHeight2;
+				isJumping = false;
+			}
+			if ((playerY >= wallY - wallHeight) && CheckCollisionRecs(playerRect, wallRect1)) {
+				isJumping = false;
+				playerY = wallY - playerHeight - 50;
+			}
+
+		}
+		if (ExitDoorOpen && GameStart) {
+			DrawRectangle(DoorX, DoorY, 70, 100, BLACK);
+		}
+		if (ButtonDown && GameStart) {
+			DrawRectangle(KeyX, KeyY, 20, 20, GOLD);
+		}
+
+		if (GameStart) {
+			if (enemyXmax) {
+				if (EnemyX < 400)
+				{
+					EnemyX += enemySpeed;
+				}
+				else {
+					enemyXmax = false;
+					enemyxmax = true;
+				}
+			}
+			if (enemyxmax) {
+				if (EnemyX > 250)
+				{
+					EnemyX -= enemySpeed;
+				}
+				else {
+					enemyXmax = true;
+					enemyxmax = false;
+				}
+			}
+		}
+		if (GameStart) {
+			if (enemyXmax2) {
+				if (EnemyX2 < 300)
+				{
+					EnemyX2 += enemySpeed2;
+				}
+				else {
+					enemyXmax2 = false;
+					enemyxmax2 = true;
+				}
+			}
+			if (enemyxmax2) {
+				if (EnemyX2 > 50)
+				{
+					EnemyX2 -= enemySpeed2;
+				}
+				else {
+					enemyXmax2 = true;
+					enemyxmax2 = false;
+				}
+			}
+		}
+		BeginDrawing();
+		ClearBackground(RAYWHITE);
+		DrawPers(playerX, playerY);
+		DrawRectangle(EnemyX, EnemyY, 40, 40, RED);
+		DrawRectangle(EnemyX2, EnemyY2, 40, 40, RED);
+		DrawRectangle(ButtonX, ButtonY, 40, 40, RED);
+		DrawRectangle(40, 540, 60, 40, GRAY);
+		DrawRectangle(ButtonX2, ButtonY2, 40, 40, BLUE);
+		DrawRectangle(240, 340, 60, 40, GRAY);
+		DrawRectangle(0, 550, 800, 50, GREEN);
+		DrawRectangle(wallX, btnwallY, wallWeight, 150, BLUE);
+		DrawRectangle(wallX, wallY, wallWeight, wallHeight, GREEN);
+		DrawRectangle(wallX2, wallY2, wallWeight2, wallHeight2, GREEN);
+		DrawRectangle(wallX3, wallY3, wallWeight2, wallHeight2, GREEN);
+		EndDrawing();
+		if (PlayerWin) {
+
+			GameStart = false;
+			CloseWindow();
+			DrawLvlMenu();
+
+
+
+
+
+
+
+
+
+
+		}
+		if (PlayerLose) {
+
+
+
+			GameStart = false;
+			CloseWindow();
+			DrawLvlMenu();
+
+
+		}
+	}
+	CloseWindow();
+}
+void levels::DrawFourth()
+{
+	int WeightScreen = 800;
+	int HeightScreen = 600;
+	int playerX = 400, playerY = 500;
+	int SpeedPlayer = 5;
+	int playerWeight = 50, playerHeight = 50;
+	int Jump = 50;
+	int ButtonY = 530;
+	int ButtonX = 50;
+	int KeyX = 2000;
+	int KeyY = 450;
+	bool isJumping = false;
+	int gravity = 5;
+	int velocityY = 0;
+
+	int ButtonY2 = 330;
+	int ButtonX2 = 250;
+
+
+	int DoorX = 2000;
+	int DoorY = 250;
+	int EnemyX = 200;
+	int EnemyY = 310;
+	int enemySpeed = 5;
+
+	int EnemyX2 = 100;
+	int EnemyY2 = 512;
+	int enemySpeed2 = 3;
+
+	int EnemyX3 = 500;
+	int EnemyY3 = 512;
+	int enemySpeed3 = 3;
+
+	int wallX = 600;
+	int wallY = 0;
+	int wallWeight = 50;
+	int wallHeight = 80;
+
+	int wallX2 = 600;
+	int wallY2 = 350;
+	int wallX3 = 200;
+	int wallY3 = 350;
+	int wallWeight2 = 300;
+	int wallHeight2 = 50;
+	int btnwallY = 75;
+	bool ButtonDown2 = false;
+	bool ButtonDown = false;
+	bool ExitDoorOpen = false;
+	bool PlayerWin = false;
+	bool PlayerLose = false;
+	bool GameVoid = true;
+	bool mouseOnbtn = false;
+	bool mouseOnbtn2 = false;
+	InitWindow(WeightScreen, HeightScreen, "test");
+	SetTargetFPS(60);
+	while (!WindowShouldClose()) {
+		GameStart = true;
+		if (IsKeyPressed(KEY_UP) && !isJumping) {
+			isJumping = true;
+			velocityY = -Jump;
+		}
+		if (!PlayerLose || !PlayerWin) {
+			if (IsKeyDown(KEY_RIGHT) && playerX < WeightScreen - playerWeight) { playerX += SpeedPlayer; }
+			if (IsKeyDown(KEY_LEFT) && playerX > 0) { playerX -= SpeedPlayer; }
+		}
+
+
+
+		Rectangle KeyRect = { static_cast<float>(KeyX),static_cast<float> (KeyY),static_cast<float> (20),static_cast<float> (20) };
+		Rectangle playerRect = { static_cast<float>(playerX),static_cast<float>(playerY),static_cast<float> (playerWeight),static_cast<float>(playerHeight) };
+		Rectangle ButtonRect = { static_cast<float>(ButtonX),static_cast<float>(ButtonY),static_cast<float> (40),static_cast<float>(40) };
+		Rectangle DoorRect = { static_cast<float> (DoorX),static_cast<float> (DoorY),static_cast<float> (70),static_cast<float>(100) };
+		Rectangle EnemyRect = { static_cast<float> (EnemyX),static_cast<float> (EnemyY),static_cast<float>(30),static_cast<float>(30) };
+		Rectangle wallRect1 = { static_cast<float> (wallX),static_cast<float> (wallY),static_cast<float> (wallWeight),static_cast<float> (wallHeight) };
+		Rectangle wallRect2 = { static_cast<float> (wallX2),static_cast<float> (wallY2),static_cast<float> (wallWeight2),static_cast<float> (wallHeight2) };
+		Rectangle ButtonRect2 = { static_cast<float>(ButtonX2),static_cast<float>(ButtonY2),static_cast<float> (40),static_cast<float>(5) };
+		Rectangle btnwall = { static_cast<float>(wallX),static_cast<float>(btnwallY),static_cast<float> (wallWeight),static_cast<float>(275) };
+		Rectangle wallRect3 = { static_cast<float> (wallX3),static_cast<float> (wallY3),static_cast<float> (wallWeight2),static_cast<float> (wallHeight2) };
+		Rectangle EnemyRect2 = { static_cast<float> (EnemyX2),static_cast<float> (EnemyY2),static_cast<float>(30),static_cast<float>(30) };
+		Rectangle EnemyRect3 = { static_cast<float> (EnemyX3),static_cast<float> (EnemyY3),static_cast<float>(30),static_cast<float>(30) };
+
+		if (CheckCollisionRecs(playerRect, wallRect1))
+		{
+			if (IsKeyDown(KEY_RIGHT)) { playerX -= SpeedPlayer; }
+			if (IsKeyDown(KEY_LEFT)) { playerX += SpeedPlayer; }
+		}
+		if (CheckCollisionRecs(playerRect, btnwall))
+		{
+			if (IsKeyDown(KEY_RIGHT)) { playerX -= SpeedPlayer; }
+			if (IsKeyDown(KEY_LEFT)) { playerX += SpeedPlayer; }
+		}
+		if (CheckCollisionRecs(playerRect, wallRect1) && playerY < wallY + playerHeight)
+		{
+
+
+			playerY = wallY - playerHeight;
+			isJumping = false;
+			velocityY = 0;
+
+			if (IsKeyPressed(KEY_UP) && !isJumping) {
+				isJumping = true;
+				velocityY = -Jump;
+			}
+		}
+
+
+
+
+
+
+
+
+		if (CheckCollisionRecs(playerRect, wallRect2) && playerY < wallY2 - wallHeight2)
+		{
+
+			isJumping = false;
+			playerY = wallY2 - wallHeight2;
+
+
+			if (IsKeyPressed(KEY_UP) && !isJumping) {
+
+				isJumping = true;
+				velocityY = -Jump;
+			}
+
+		}
+		else if (isJumping == false && !CheckCollisionRecs(playerRect, wallRect2) && playerY < wallY2 && !CheckCollisionRecs(playerRect, wallRect1) && !CheckCollisionRecs(playerRect, wallRect3))
+		{
+
+			if (playerY >= wallY2 - wallHeight2 - playerHeight) {
+				playerY = wallY2 - playerHeight - wallHeight2;
+				isJumping = false;
+			}
+		}
+		if (CheckCollisionRecs(playerRect, wallRect2) && playerY > wallY2)
+		{
+			playerY = wallY2 + playerHeight;
+			velocityY = 0;
+			isJumping = false;
+
+
+		}
+
+		if (CheckCollisionRecs(playerRect, wallRect3) && playerY < wallY3 - wallHeight2)
+		{
+
+			isJumping = false;
+			playerY = wallY3 - wallHeight2;
+
+
+			if (IsKeyPressed(KEY_UP) && !isJumping) {
+
+				isJumping = true;
+				velocityY = -Jump;
+			}
+
+		}
+		else if (isJumping == false && !CheckCollisionRecs(playerRect, wallRect3) && playerY < wallY3 && !CheckCollisionRecs(playerRect, wallRect1) && !CheckCollisionRecs(playerRect, wallRect2))
+		{
+
+			if (playerY >= wallY3 - wallHeight2 - playerHeight) {
+				playerY = wallY3 - playerHeight - wallHeight2;
+				isJumping = false;
+			}
+		}
+		if (CheckCollisionRecs(playerRect, wallRect3) && playerY > wallY3)
+		{
+			playerY = wallY3 + playerHeight;
+			velocityY = 0;
+			isJumping = false;
+
+
+		}
+		if (CheckCollisionRecs(playerRect, wallRect3) && (325 < playerY))
+		{
+			if (IsKeyDown(KEY_RIGHT)) { playerX -= SpeedPlayer; }
+			if (IsKeyDown(KEY_LEFT)) { playerX += SpeedPlayer; }
+		}
+		if (CheckCollisionRecs(playerRect, wallRect1) && playerY > wallY)
+		{
+			playerY = wallY + playerHeight + wallHeight;
+			velocityY = 0;
+			isJumping = false;
+
+		}
+
+		if (CheckCollisionRecs(playerRect, wallRect2) && (325 < playerY))
+		{
+			if (IsKeyDown(KEY_RIGHT)) { playerX -= SpeedPlayer; }
+			if (IsKeyDown(KEY_LEFT)) { playerX += SpeedPlayer; }
+		}
+
+
+
+
+		if (!CheckCollisionRecs(playerRect, wallRect2) && isJumping == false && !CheckCollisionRecs(playerRect, wallRect1) && !CheckCollisionRecs(playerRect, wallRect3)) {
+			playerY += velocityY;
+			velocityY += gravity;
+
+
+			if (playerY >= HeightScreen - playerHeight) {
+				playerY = HeightScreen - playerHeight - 50;
+
+			}
+		}
+
+
+
+
+		if (CheckCollisionRecs(playerRect, ButtonRect) && ButtonDown == false && GameStart)
+		{
+			KeyX = 700;
+			ButtonY += 8;
+			ButtonDown = true;
+		}
+		if (CheckCollisionRecs(playerRect, ButtonRect2) && ButtonDown2 == false && GameStart)
+		{
+			btnwallY += 4000;
+			ButtonY2 += 8;
+			ButtonDown2 = true;
+		}
+		if (CheckCollisionRecs(playerRect, EnemyRect) || CheckCollisionRecs(playerRect, EnemyRect2)) {
+			PlayerLose = true;
+			DrawText("You Lose", 300, 200, 48, RED);
+		}
+
+		if (CheckCollisionRecs(playerRect, KeyRect) && GameStart) {
+			ExitDoorOpen = true;
+			KeyX += 2000;
+			DoorX = 730;
+		}
+
+
+		if (CheckCollisionRecs(playerRect, DoorRect) && GameStart) {
+			DrawText("You Win", 300, 200, 48, RED);
+			PlayerWin = true;
+
+		}
+
+		if (isJumping) {
+			playerY += velocityY;
+			velocityY += gravity;
+
+			if (playerY <= -HeightScreen + playerHeight) {
+				playerY = -HeightScreen + playerHeight + 50;
+
+			}
+			if (playerY >= HeightScreen - playerHeight) {
+				playerY = HeightScreen - playerHeight - 50;
+				isJumping = false;
+			}
+			if ((playerY >= wallY2 - wallHeight2) && CheckCollisionRecs(playerRect, wallRect2)) {
+				playerY = wallY2 - playerHeight - wallHeight2;
+				isJumping = false;
+			}
+			if ((playerY >= wallY3 - wallHeight2) && CheckCollisionRecs(playerRect, wallRect3)) {
+				playerY = wallY3 - playerHeight - wallHeight2;
+				isJumping = false;
+			}
+			if ((playerY >= wallY - wallHeight) && CheckCollisionRecs(playerRect, wallRect1)) {
+				isJumping = false;
+				playerY = wallY - playerHeight - 50;
+			}
+
+		}
+		if (ExitDoorOpen && GameStart) {
+			DrawRectangle(DoorX, DoorY, 70, 100, BLACK);
+		}
+		if (ButtonDown && GameStart) {
+			DrawRectangle(KeyX, KeyY, 20, 20, GOLD);
+		}
+
+		if (GameStart) {
+			if (enemyXmax) {
+				if (EnemyX < 400)
+				{
+					EnemyX += enemySpeed;
+				}
+				else {
+					enemyXmax = false;
+					enemyxmax = true;
+				}
+			}
+			if (enemyxmax) {
+				if (EnemyX > 250)
+				{
+					EnemyX -= enemySpeed;
+				}
+				else {
+					enemyXmax = true;
+					enemyxmax = false;
+				}
+			}
+		}
+		if (GameStart) {
+			if (enemyXmax2) {
+				if (EnemyX2 < 300)
+				{
+					EnemyX2 += enemySpeed2;
+				}
+				else {
+					enemyXmax2 = false;
+					enemyxmax2 = true;
+				}
+			}
+			if (enemyxmax2) {
+				if (EnemyX2 > 50)
+				{
+					EnemyX2 -= enemySpeed2;
+				}
+				else {
+					enemyXmax2 = true;
+					enemyxmax2 = false;
+				}
+			}
+		}
+		if (GameStart) {
+			if (enemyYmax) {
+				if (EnemyY3 > 100)
+				{
+					EnemyY3 -= enemySpeed3;
+				}
+				else {
+					enemyYmax = false;
+					enemyymax = true;
+				}
+			}
+			if (enemyymax) {
+				if (EnemyY3 < 50)
+				{
+					EnemyY3 += enemySpeed3;
+				}
+				else {
+					enemyYmax = true;
+					enemyymax = false;
+				}
+			}
+		}
+		BeginDrawing();
+		ClearBackground(RAYWHITE);
+		DrawPers(playerX, playerY);
+		DrawRectangle(EnemyX, EnemyY, 40, 40, RED);
+		DrawRectangle(EnemyX2, EnemyY2, 40, 40, RED);
+		DrawRectangle(EnemyX3, EnemyY3, 40, 40, RED);
+		DrawRectangle(ButtonX, ButtonY, 40, 40, RED);
+		DrawRectangle(40, 540, 60, 40, GRAY);
+		DrawRectangle(ButtonX2, ButtonY2, 40, 40, BLUE);
+		DrawRectangle(240, 340, 60, 40, GRAY);
+		DrawRectangle(0, 550, 800, 50, GREEN);
+		DrawRectangle(wallX, btnwallY, wallWeight, 275, BLUE);
+		DrawRectangle(wallX, wallY, wallWeight, wallHeight, GREEN);
+		DrawRectangle(wallX2, wallY2, wallWeight2, wallHeight2, GREEN);
+		DrawRectangle(wallX3, wallY3, wallWeight2, wallHeight2, GREEN);
+		EndDrawing();
+		if (PlayerWin) {
+
+			GameStart = false;
+			CloseWindow();
+			DrawLvlMenu();
+
+
+
+
+
+
+
+
+
+
+		}
+		if (PlayerLose) {
+
+
+
+			GameStart = false;
+			CloseWindow();
+			DrawLvlMenu();
+
+
+		}
+	}
+	CloseWindow();
+}
+
+
 
 
 
